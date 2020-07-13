@@ -31,7 +31,8 @@ public class Pantalla extends JFrame implements ActionListener {
 	JScrollPane scrollMenuTareas;
 
 	JPanel menus;
-	JButton btnMenuTiempo, btnMenuTareas, btnMenuYo, btnMenuMetas, btnMenuHabitos, btnMenuJuego;
+	JLabel nivel;
+	JButton pp, btnMenuTiempo, btnMenuTareas, btnMenuYo, btnMenuMetas, btnMenuHabitos, btnMenuJuego;
 	JPanel menuTiempo;
 	public static JLabel lbPuntuacion;
 	static JPanel menuTareas;
@@ -90,6 +91,13 @@ public class Pantalla extends JFrame implements ActionListener {
 
 	Icon iconUsuarioOff = new ImageIcon("recursos/botones/Usuario_blanco.png");
 	Icon iconUsuarioOn = new ImageIcon("recursos/botones/Usuario.png");
+
+	Icon ipp = new ImageIcon("recursos/botones/PP.png");
+	Icon juego = new ImageIcon("recursos/botones/juego.png");
+	Icon juegoB = new ImageIcon("recursos/botones/juegoBl.png");
+
+	Icon meta = new ImageIcon("recursos/botones/meta.png");
+	Icon metaB = new ImageIcon("recursos/botones/metaw.png");
 
 	public Pantalla() {
 
@@ -188,7 +196,7 @@ public class Pantalla extends JFrame implements ActionListener {
 
 		btnMenuJuego = new JButton();
 		btnMenuJuego.setBounds(210, 0, 70, 60);
-		btnMenuJuego.setIcon(iconMenuTareasOff);
+		btnMenuJuego.setIcon(juegoB);
 		btnMenuJuego.setFocusPainted(false);
 		btnMenuJuego.setBackground(Color.BLACK);
 		btnMenuJuego.setBorder(null);
@@ -196,7 +204,7 @@ public class Pantalla extends JFrame implements ActionListener {
 
 		btnMenuMetas = new JButton();
 		btnMenuMetas.setBounds(280, 0, 70, 60);
-		btnMenuMetas.setIcon(iconMenuTareasOff);
+		btnMenuMetas.setIcon(metaB);
 		btnMenuMetas.setFocusPainted(false);
 		btnMenuMetas.setBackground(Color.BLACK);
 		btnMenuMetas.setBorder(null);
@@ -271,6 +279,8 @@ public class Pantalla extends JFrame implements ActionListener {
 
 		if (event.getSource() == btnMenuYo) {
 
+			nivel.setText("Nivel " + puntuacion / 1000);
+
 			apagarBotones();
 			ocultarPaneles();
 			btnMenuYo.setBackground(colorFondoVerde);
@@ -283,7 +293,7 @@ public class Pantalla extends JFrame implements ActionListener {
 			apagarBotones();
 			ocultarPaneles();
 			btnMenuJuego.setBackground(colorFondoAmarillo);
-			btnMenuJuego.setIcon(iconMenuTareasOn);
+			btnMenuJuego.setIcon(juego);
 			menuJuego.setVisible(true);
 		}
 
@@ -292,7 +302,7 @@ public class Pantalla extends JFrame implements ActionListener {
 			apagarBotones();
 			ocultarPaneles();
 			btnMenuMetas.setBackground(colorFondoRojo);
-			btnMenuMetas.setIcon(iconMenuTareasOn);
+			btnMenuMetas.setIcon(meta);
 			menuMetas.setVisible(true);
 			sMetasRealjaja.setVisible(true);
 		}
@@ -458,10 +468,10 @@ public class Pantalla extends JFrame implements ActionListener {
 		btnMenuYo.setIcon(iconUsuarioOff);
 
 		btnMenuJuego.setBackground(Color.BLACK);
-		btnMenuJuego.setIcon(iconMenuTareasOff);
+		btnMenuJuego.setIcon(juegoB);
 
 		btnMenuMetas.setBackground(Color.BLACK);
-		btnMenuMetas.setIcon(iconMenuTareasOff);
+		btnMenuMetas.setIcon(metaB);
 
 		btnMenuHabitos.setBackground(Color.BLACK);
 		btnMenuHabitos.setIcon(iconMenuTareasOff);
@@ -740,7 +750,24 @@ public class Pantalla extends JFrame implements ActionListener {
 		lbPuntuacion.setFont(fuente);
 		lbPuntuacion.setVisible(true);
 
+		pp = new JButton();
+		pp.setBounds(110, 80, 200, 200);
+		pp.setIcon(ipp);
+		pp.setVisible(true);
+		pp.setOpaque(false);
+		pp.setContentAreaFilled(false);
+		pp.setBorderPainted(false);
+		// pp.setEnabled(false);
+
+		nivel = new JLabel();
+		nivel.setBounds(160, 300, 200, 50);
+		nivel.setFont(fuente);
+		nivel.setText("Nivel " + puntuacion / 1000);
+		nivel.setVisible(true);
+
+		menuYo.add(nivel);
 		menuYo.add(lbPuntuacion);
+		menuYo.add(pp);
 
 	}
 

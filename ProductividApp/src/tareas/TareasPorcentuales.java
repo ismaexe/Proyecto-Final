@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import pricipal.Pantalla;
+
 public class TareasPorcentuales extends JLabel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -112,6 +114,9 @@ public class TareasPorcentuales extends JLabel implements ActionListener {
 
 			} else if (!reclamada) {
 				btnRecompensa.setIcon(iReclamada);
+				Pantalla.puntuacion = Pantalla.puntuacion + 200;
+				Pantalla.lbPuntuacion.setText("Puntuacion: " + Pantalla.puntuacion);
+				Pantalla.lbPuntuacion.repaint();
 			}
 		}
 
