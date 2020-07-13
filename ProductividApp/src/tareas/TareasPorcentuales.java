@@ -71,6 +71,9 @@ public class TareasPorcentuales extends JLabel implements ActionListener {
 					}
 				}
 				pb.setValue(valorTotal);
+				if (valorTotal > 95) {
+					pb.setValue(100);
+				}
 
 				pb.repaint();
 			}
