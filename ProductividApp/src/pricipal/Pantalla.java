@@ -33,14 +33,14 @@ public class Pantalla extends JFrame implements ActionListener {
 	JPanel menus;
 	JButton btnMenuTiempo, btnMenuTareas, btnMenuYo, btnMenuMetas, btnMenuHabitos, btnMenuJuego;
 	JPanel menuTiempo;
-	JLabel lbPuntuacion;
+	public static JLabel lbPuntuacion;
 	static JPanel menuTareas;
 	JPanel menuYo;
 	JPanel menuMetas;
 	JScrollPane sMetas, sMetasRealjaja;
 	JPanel menuHabitos;
 	JPanel menuJuego;
-	int puntuacion = 0;
+	public static int puntuacion = 0;
 	JLabel lbTituloTareas, lbHoy, lbCantidadSubtareas, lbTituloMetas;
 	JLabel lbTituloDeLaTarea, lbSubtareasTitle;
 	JLabel lbTituloDeLaMeta, lbCantidadSubMetas;
@@ -133,6 +133,7 @@ public class Pantalla extends JFrame implements ActionListener {
 		menuYo.setBounds(0, 0, 426, 610);
 		menuYo.setBackground(colorFondoVerde);
 		menuYo.setVisible(true);
+		menuYo.setLayout(null);
 
 		menuJuego = new JPanel();
 		menuJuego.setBounds(0, 0, 426, 610);
@@ -225,6 +226,8 @@ public class Pantalla extends JFrame implements ActionListener {
 
 		cargarPanelTareas();
 		cargarPanelMetas();
+		cargarPanelYo();
+
 		btnAddTarea.addActionListener(this);
 		btnCancelAddTarea.addActionListener(this);
 		btnAddCrearTarea.addActionListener(this);
@@ -732,7 +735,12 @@ public class Pantalla extends JFrame implements ActionListener {
 
 	public void cargarPanelYo() {
 
-		lbPuntuacion = new JLabel("Puntuacion: " + puntuacion);
+		lbPuntuacion = new JLabel("Puntuacion: " + puntuacion, SwingConstants.CENTER);
+		lbPuntuacion.setBounds(0, 0, 420, 50);
+		lbPuntuacion.setFont(fuente);
+		lbPuntuacion.setVisible(true);
+
+		menuYo.add(lbPuntuacion);
 
 	}
 

@@ -18,11 +18,13 @@ public class TareaSimple extends JLabel implements ActionListener {
 
 	String textoTarea;
 	JLabel lbTextoTarea;
-	JButton btnCompletada, btnOpcTS, btnEdit, btnDelete;
+	JButton btnCompletada, btnOpcTS, btnEdit, btnDelete, btnRecompensa;
 	int tscompletada = 0;
 	boolean opcDesplegadas = false;
 	int idTS;
 	int posY;
+	boolean reclamada = false;
+	JLabel lbRecompensa;
 
 	Color colorFondoMoradoF = new Color(133, 106, 192);
 
@@ -30,10 +32,17 @@ public class TareaSimple extends JLabel implements ActionListener {
 	Icon completado = new ImageIcon("recursos/botones/completado.png");
 	Icon opcTS = new ImageIcon("recursos/botones/opcTresPuntos.png");
 	Icon eliminarTS = new ImageIcon("recursos/botones/eliminar.png");
+	Icon iRec = new ImageIcon("recursos/botones/recompensa.png");
+	Icon iReclamada = new ImageIcon("recursos/botones/reclamada.png");
 
 	public TareaSimple(int posY, String textoTarea, int idTS) {
 
 		this.idTS = idTS;
+		lbRecompensa = new JLabel();
+		lbRecompensa.setBounds(200, 10, 60, 30);
+		lbRecompensa.setBackground(Color.white);
+		lbRecompensa.setOpaque(true);
+		lbRecompensa.setVisible(false);
 
 		this.setBounds(30, posY, 350, 50);
 		this.setLayout(null);
@@ -42,7 +51,7 @@ public class TareaSimple extends JLabel implements ActionListener {
 		this.setOpaque(true);
 
 		lbTextoTarea = new JLabel(textoTarea, SwingConstants.LEFT);
-		lbTextoTarea.setBounds(70, 0, 250, 50);
+		lbTextoTarea.setBounds(100, 0, 250, 50);
 		lbTextoTarea.setVisible(true);
 		lbTextoTarea.setLayout(null);
 
@@ -54,6 +63,15 @@ public class TareaSimple extends JLabel implements ActionListener {
 		btnCompletada.setFocusPainted(false);
 		btnCompletada.setBorder(null);
 		btnCompletada.setVisible(true);
+
+		btnRecompensa = new JButton();
+		btnRecompensa.setBounds(60, 10, 30, 30);
+		btnRecompensa.setIcon(iRec);
+		btnRecompensa.setOpaque(false);
+		btnRecompensa.setContentAreaFilled(false);
+		btnRecompensa.setFocusPainted(false);
+		btnRecompensa.setBorder(null);
+		btnRecompensa.setVisible(false);
 
 		btnOpcTS = new JButton();
 		btnOpcTS.setBounds(320, 10, 30, 30);
@@ -82,15 +100,19 @@ public class TareaSimple extends JLabel implements ActionListener {
 		btnDelete.setBorder(null);
 		btnDelete.setVisible(false);
 
+		this.add(lbRecompensa);
+		this.add(btnRecompensa);
 		this.add(lbTextoTarea);
 		this.add(btnCompletada);
 		this.add(btnOpcTS);
 		this.add(btnDelete);
 		this.add(btnEdit);
+
 		this.setVisible(true);
 		btnCompletada.addActionListener(this);
 		btnOpcTS.addActionListener(this);
 		btnDelete.addActionListener(this);
+		btnRecompensa.addActionListener(this);
 
 	}
 
@@ -98,12 +120,14 @@ public class TareaSimple extends JLabel implements ActionListener {
 
 		this.tscompletada = 1;
 		btnCompletada.setIcon(completado);
+		btnRecompensa.setVisible(true);
 	}
 
 	public void desmarcar() {
 
 		this.tscompletada = 0;
 		btnCompletada.setIcon(nocompletado);
+		btnRecompensa.setVisible(false);
 	}
 
 	@Override
@@ -115,6 +139,7 @@ public class TareaSimple extends JLabel implements ActionListener {
 
 			} else if (tscompletada == 0) {
 				marcarComoCompletada();
+
 			}
 		}
 
@@ -135,6 +160,16 @@ public class TareaSimple extends JLabel implements ActionListener {
 
 			Pantalla.eliminarTS(idTS);
 		}
+		if (event.getSource() == btnRecompensa) {
+
+			if (reclamada) {
+
+			} else if (!reclamada) {
+				btnRecompensa.setIcon(iReclamada);
+				darRecompensa();
+
+			}
+		}
 
 	}
 
@@ -149,6 +184,33 @@ public class TareaSimple extends JLabel implements ActionListener {
 
 	public int getPosY() {
 		return posY;
+	}
+
+	public void darRecompensa() {
+		Thread recompenzando = new Thread() {
+			public void run() {
+
+				int premio = (int) Math.floor(Math.random() * (100 - 50 + 1) + 50);
+				lbRecompensa.setText("+" + premio + " pts");
+				lbRecompensa.setVisible(true);
+				System.out.println(premio);
+
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				lbRecompensa.setVisible(false);
+				Pantalla.puntuacion = Pantalla.puntuacion + premio;
+				Pantalla.lbPuntuacion.setText("Puntuacion: " + Pantalla.puntuacion);
+				Pantalla.lbPuntuacion.repaint();
+
+			}
+		};
+
+		recompenzando.start();
+		this.repaint();
 	}
 
 }
