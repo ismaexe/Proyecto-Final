@@ -26,7 +26,8 @@ public class TareaSimple extends JLabel implements ActionListener {
 	boolean reclamada = false;
 	JLabel lbRecompensa;
 
-	Color colorFondoMoradoF = new Color(133, 106, 192);
+	Color colorFondoMoradoF = new Color(108, 73, 97);
+	Color colorBlanco = new Color(255, 255, 255);
 
 	Icon nocompletado = new ImageIcon("recursos/botones/nocompletado.png");
 	Icon completado = new ImageIcon("recursos/botones/completado.png");
@@ -54,6 +55,7 @@ public class TareaSimple extends JLabel implements ActionListener {
 		lbTextoTarea.setBounds(100, 0, 250, 50);
 		lbTextoTarea.setVisible(true);
 		lbTextoTarea.setLayout(null);
+		lbTextoTarea.setForeground(colorBlanco);
 
 		btnCompletada = new JButton();
 		btnCompletada.setBounds(20, 10, 30, 30);

@@ -68,13 +68,15 @@ public class Pantalla extends JFrame implements ActionListener {
 	JFormattedTextField ftfCantidadSubMetas = new JFormattedTextField(new Integer(2));
 
 	Color colorFondoAzul = new Color(141, 200, 255);
-	Color colorFondoMorado = new Color(177, 141, 255);
-	Color colorFondoMoradoF = new Color(133, 106, 192);
-	Color colorFondoVerde = new Color(153, 255, 141);
+	Color colorFondoMorado = new Color(212, 197, 207);
+	Color colorFondoMoradoF = new Color(108, 73, 97);
+	Color colorFondoVerde = new Color(212, 197, 207);
 	Color colorFondoAmarillo = new Color(250, 255, 141);
 	Color colorFondoRojo = new Color(255, 141, 141);
 	Color colorFondoRojoF = new Color(210, 141, 141);
 	Color colorFondoAzulF = new Color(141, 148, 255);
+
+	Color colorBlanco = new Color(255, 255, 255);
 
 	Font fuente = new Font("Windows", 1, 30);
 	Font fuenteMediana = new Font("Calibri", 1, 20);
@@ -497,6 +499,7 @@ public class Pantalla extends JFrame implements ActionListener {
 		lbTituloTareas.setBackground(colorFondoMoradoF);
 		lbTituloTareas.setOpaque(true);
 		lbTituloTareas.setFont(fuente);
+		lbTituloTareas.setForeground(colorBlanco);
 
 		String tiposTareas[] = { "Tarea simple", "Tarea porcentual" };
 
@@ -624,6 +627,7 @@ public class Pantalla extends JFrame implements ActionListener {
 		lbTituloMetas.setBackground(colorFondoRojoF);
 		lbTituloMetas.setOpaque(true);
 		lbTituloMetas.setFont(fuente);
+		lbTituloMetas.setForeground(colorBlanco);
 
 		btnAddMeta = new JButton();
 		btnAddMeta.setBounds(110, 20, 30, 30);

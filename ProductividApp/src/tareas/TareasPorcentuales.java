@@ -1,5 +1,7 @@
 package tareas;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,6 +26,8 @@ public class TareasPorcentuales extends JLabel implements ActionListener {
 	boolean reclamada = false;
 	Icon iRec = new ImageIcon("recursos/botones/recompensa.png");
 	Icon iReclamada = new ImageIcon("recursos/botones/reclamada.png");
+	Font fuenteMediana = new Font("Calibri", 1, 20);
+	Color colorBlanco = new Color(255, 255, 255);
 
 	public TareasPorcentuales(String titulo, ArrayList<String> alTareasSimplesTP) {
 
@@ -34,7 +38,7 @@ public class TareasPorcentuales extends JLabel implements ActionListener {
 		alTSP = new ArrayList<TareaSimple>();
 
 		btnRecompensa = new JButton();
-		btnRecompensa.setBounds(30, 0, 30, 30);
+		btnRecompensa.setBounds(30, 10, 30, 30);
 		btnRecompensa.setIcon(iRec);
 		btnRecompensa.setOpaque(false);
 		btnRecompensa.setContentAreaFilled(false);
@@ -44,6 +48,7 @@ public class TareasPorcentuales extends JLabel implements ActionListener {
 
 		tituloTP = new JLabel(titulo, SwingConstants.LEFT);
 		tituloTP.setBounds(70, 0, 200, 50);
+		tituloTP.setFont(fuenteMediana);
 		tituloTP.setVisible(true);
 
 		pb = new JProgressBar(0, 100);
