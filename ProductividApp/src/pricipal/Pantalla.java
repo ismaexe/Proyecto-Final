@@ -11,10 +11,13 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import tareas.PanelAddTarea;
@@ -24,25 +27,36 @@ import tareas.TareasPorcentuales;
 public class Pantalla extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+
+	JScrollPane scrollMenuTareas;
+
 	JPanel menus;
 	JButton btnMenuTiempo, btnMenuTareas, btnMenuYo, btnMenuMetas, btnMenuHabitos, btnMenuJuego;
 	JPanel menuTiempo;
 	static JPanel menuTareas;
 	JPanel menuYo;
 	JPanel menuMetas;
+	JScrollPane sMetas;
 	JPanel menuHabitos;
 	JPanel menuJuego;
-	JLabel lbTituloTareas, lbHoy;
-	JLabel lbTituloDeLaTarea;
-	JTextField tfTituloDeLaTarea;
+	JLabel lbTituloTareas, lbHoy, lbCantidadSubtareas;
+	JLabel lbTituloDeLaTarea, lbSubtareasTitle;
+	JTextField tfTituloDeLaTarea, tfCantidadSubtareas;
 	String strTituloDeLaTarea;
-	JButton btnAddTarea, btnCancelAddTarea, btnAddCrearTarea;
+	JButton btnAddTarea, btnCancelAddTarea, btnAddCrearTarea, btnRefreshNumT;
 	PanelAddTarea panelAddTarea;
 	TareaSimple ts1, tsTemp;
-	TareasPorcentuales tp1;
+	TareasPorcentuales tp1, tpTemp;
 	static int totalTareasSimples = 0;
 	static ArrayList<TareaSimple> alTareasSimples;
+	static ArrayList<TareasPorcentuales> alTareasPorcentuales;
+	ArrayList<String> alNombresTP;
 	int cualTipo;
+	int cuantasSubtareas;
+
+	ArrayList<JTextField> alSubtareasRellenar;
+
+	JFormattedTextField ftfCantidadSubtareas = new JFormattedTextField(new Integer(2));
 
 	Color colorFondoAzul = new Color(141, 200, 255);
 	Color colorFondoMorado = new Color(177, 141, 255);
@@ -70,22 +84,31 @@ public class Pantalla extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setLayout(null);
-		this.pack();
 		this.setLocationRelativeTo(null);
 		this.getContentPane().setBackground(Color.BLACK);
 
 		alTareasSimples = new ArrayList<TareaSimple>();
+		alTareasPorcentuales = new ArrayList<TareasPorcentuales>();
+		alSubtareasRellenar = new ArrayList<JTextField>();
+		alNombresTP = new ArrayList<String>();
 		menuTiempo = new JPanel();
 		menuTiempo.setBounds(0, 0, 426, 610);
 		menuTiempo.setBackground(colorFondoAzul);
 		menuTiempo.setVisible(false);
 
 		menuTareas = new JPanel();
-		menuTareas.setBounds(0, 0, 426, 610);
-		menuTareas.setBackground(colorFondoMorado);
+		sMetas = new JScrollPane(menuMetas);
+		sMetas.setBounds(0, 0, 420, 610);
+		sMetas.setViewportView(menuTareas);
 		menuTareas.setLayout(null);
-		menuTareas.setVisible(false);
+		menuTareas.setPreferredSize(new Dimension(426, 2000));
 
+		// menuTareas.setBounds(0, 0, 426, 610);
+		menuTareas.setBackground(colorFondoMorado);
+		sMetas.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		sMetas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		// menuTareas.setVisible(false);
 		menuYo = new JPanel();
 		menuYo.setBounds(0, 0, 426, 610);
 		menuYo.setBackground(colorFondoVerde);
@@ -99,7 +122,7 @@ public class Pantalla extends JFrame implements ActionListener {
 		menuMetas = new JPanel();
 		menuMetas.setBounds(0, 0, 426, 610);
 		menuMetas.setBackground(colorFondoRojo);
-		menuMetas.setVisible(false);
+		menuMetas.setVisible(true);
 
 		menuHabitos = new JPanel();
 		menuHabitos.setBounds(0, 0, 426, 610);
@@ -178,15 +201,18 @@ public class Pantalla extends JFrame implements ActionListener {
 		btnAddTarea.addActionListener(this);
 		btnCancelAddTarea.addActionListener(this);
 		btnAddCrearTarea.addActionListener(this);
+		btnRefreshNumT.addActionListener(this);
 
-		this.setVisible(true);
 		this.add(menus);
 		this.add(menuTiempo);
-		this.add(menuTareas);
+		// this.add(menuTareas);
 		this.add(menuYo);
 		this.add(menuJuego);
 		this.add(menuMetas);
 		this.add(menuHabitos);
+		this.getContentPane().add(sMetas);
+		this.pack();
+		this.setVisible(true);
 	}
 
 	@Override
@@ -205,6 +231,7 @@ public class Pantalla extends JFrame implements ActionListener {
 			btnMenuTareas.setBackground(colorFondoMorado);
 			btnMenuTareas.setIcon(iconMenuTareasOn);
 			menuTareas.setVisible(true);
+			sMetas.setVisible(true);
 		}
 
 		if (event.getSource() == btnMenuYo) {
@@ -250,18 +277,62 @@ public class Pantalla extends JFrame implements ActionListener {
 
 		if (event.getSource() == btnAddCrearTarea) {
 
-			totalTareasSimples = alTareasSimples.size();
+			if (elegirTipoTarea.getSelectedIndex() == 0) {
 
-			strTituloDeLaTarea = tfTituloDeLaTarea.getText();
-			tsTemp = new TareaSimple(totalTareasSimples * 50 + 120, strTituloDeLaTarea, totalTareasSimples);
-			alTareasSimples.add(tsTemp);
-			totalTareasSimples = alTareasSimples.size();
-			tfTituloDeLaTarea.setText(null);
+				totalTareasSimples = alTareasSimples.size();
 
+				strTituloDeLaTarea = tfTituloDeLaTarea.getText();
+				tsTemp = new TareaSimple(totalTareasSimples * 50 + 120, strTituloDeLaTarea, totalTareasSimples);
+				alTareasSimples.add(tsTemp);
+				totalTareasSimples = alTareasSimples.size();
+				tfTituloDeLaTarea.setText(null);
+
+			} else if (elegirTipoTarea.getSelectedIndex() == 1) {
+				int posYtp = 0;
+				int totalSubtareas = alSubtareasRellenar.size();
+				String nombreTmp;
+				for (int i = 0; i < totalSubtareas; i++) {
+					nombreTmp = alSubtareasRellenar.get(i).getText();
+					alNombresTP.add(nombreTmp);
+				}
+
+				strTituloDeLaTarea = tfTituloDeLaTarea.getText();
+				tpTemp = new TareasPorcentuales(strTituloDeLaTarea, alNombresTP);
+				alTareasPorcentuales.add(tpTemp);
+
+			}
+			alNombresTP.clear();
 			actualizarTareasSimples();
 			this.repaint();
-
 			panelAddTarea.setVisible(false);
+		}
+
+		if (event.getSource() == btnRefreshNumT) {
+
+			int diferencia;
+			diferencia = (int) ftfCantidadSubtareas.getValue() - cuantasSubtareas;
+
+			if ((int) ftfCantidadSubtareas.getValue() > cuantasSubtareas) {
+				for (int i = 0; i < diferencia; i++) {
+					JTextField lbSub = new JTextField();
+					lbSub.setBounds(30, (i + cuantasSubtareas) * 30 + 200, 200, 30);
+					lbSub.setVisible(true);
+					alSubtareasRellenar.add(lbSub);
+					panelAddTarea.add(lbSub);
+
+				}
+			} else {
+				for (int i = 0; i < Math.abs(diferencia); i++) {
+
+					System.out.println(i);
+					panelAddTarea.remove(alSubtareasRellenar.get(alSubtareasRellenar.size() - 1));
+					alSubtareasRellenar.remove(alSubtareasRellenar.size() - 1);
+
+				}
+
+			}
+			cuantasSubtareas = (int) ftfCantidadSubtareas.getValue();
+			panelAddTarea.repaint();
 		}
 
 	}
@@ -338,12 +409,32 @@ public class Pantalla extends JFrame implements ActionListener {
 		tfTituloDeLaTarea.setBounds(130, 70, 200, 30);
 		tfTituloDeLaTarea.setVisible(true);
 
+		lbCantidadSubtareas = new JLabel("Numero de subtareas: ", SwingConstants.LEFT);
+		lbCantidadSubtareas.setBounds(20, 120, 150, 30);
+		lbCantidadSubtareas.setVisible(false);
+
+		// ftfCantidadSubtareas = new JTextField();
+		ftfCantidadSubtareas.setBounds(190, 120, 50, 30);
+		ftfCantidadSubtareas.setVisible(false);
+
+		btnRefreshNumT = new JButton();
+		btnRefreshNumT.setBounds(260, 120, 30, 30);
+		btnRefreshNumT.setVisible(false);
+
+		lbSubtareasTitle = new JLabel("Subtareas:", SwingConstants.LEFT);
+		lbSubtareasTitle.setBounds(30, 170, 100, 30);
+		lbSubtareasTitle.setVisible(false);
+
 		panelAddTarea = new PanelAddTarea();
 		panelAddTarea.add(btnCancelAddTarea);
 		panelAddTarea.add(lbTituloDeLaTarea);
 		panelAddTarea.add(tfTituloDeLaTarea);
 		panelAddTarea.add(btnAddCrearTarea);
 		panelAddTarea.add(elegirTipoTarea);
+		panelAddTarea.add(lbCantidadSubtareas);
+		panelAddTarea.add(ftfCantidadSubtareas);
+		panelAddTarea.add(btnRefreshNumT);
+		panelAddTarea.add(lbSubtareasTitle);
 
 		actualizarTareasSimples();
 
@@ -353,8 +444,37 @@ public class Pantalla extends JFrame implements ActionListener {
 				cualTipo = elegirTipoTarea.getSelectedIndex();
 				switch (cualTipo) {
 				case 0:
+					lbCantidadSubtareas.setVisible(false);
+					ftfCantidadSubtareas.setVisible(false);
+					btnRefreshNumT.setVisible(false);
+					lbSubtareasTitle.setVisible(false);
+
+					int totalSubRellenar = alSubtareasRellenar.size();
+					for (int i = 0; i < totalSubRellenar; i++) {
+						panelAddTarea.remove(alSubtareasRellenar.get(i));
+					}
+					panelAddTarea.repaint();
+
 					break;
 				case 1:
+					lbCantidadSubtareas.setVisible(true);
+					ftfCantidadSubtareas.setVisible(true);
+					lbSubtareasTitle.setVisible(true);
+					cuantasSubtareas = (int) ftfCantidadSubtareas.getValue();
+
+					for (int i = 0; i < cuantasSubtareas; i++) {
+
+						JTextField lbSub = new JTextField();
+						lbSub.setBounds(30, i * 30 + 200, 200, 30);
+						lbSub.setVisible(true);
+						alSubtareasRellenar.add(lbSub);
+						panelAddTarea.add(lbSub);
+					}
+
+					panelAddTarea.repaint();
+
+					btnRefreshNumT.setVisible(true);
+
 					break;
 				}
 			}
@@ -374,6 +494,17 @@ public class Pantalla extends JFrame implements ActionListener {
 		for (int i = 0; i < totalTareasSimples; i++) {
 			menuTareas.add(alTareasSimples.get(i));
 		}
+
+		int tamTareasPorcentualesY = 0;
+
+		for (int i = 0; i < alTareasPorcentuales.size(); i++) {
+			if (i > 0) {
+				tamTareasPorcentualesY = alTareasPorcentuales.get(i - 1).getHeight() + tamTareasPorcentualesY;
+			}
+			alTareasPorcentuales.get(i).setLocation(20, (totalTareasSimples * 50 + 120) + tamTareasPorcentualesY);
+			menuTareas.add(alTareasPorcentuales.get(i));
+		}
+
 		// }
 		// Pantalla.repaint();
 	}

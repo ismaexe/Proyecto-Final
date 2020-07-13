@@ -9,6 +9,7 @@ public class PanelAddTarea extends JPanel {
 	public PanelAddTarea() {
 
 		this.setBounds(30, 90, 350, 500);
+
 		this.setVisible(false);
 		this.setLayout(null);
 

@@ -147,4 +147,8 @@ public class TareaSimple extends JLabel implements ActionListener {
 		this.setLocation(30, posY);
 	}
 
+	public int getPosY() {
+		return posY;
+	}
+
 }
